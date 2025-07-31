@@ -1,0 +1,28 @@
+controllers:
+    resource:
+        path: ../src/Controller/
+        namespace: App\Controller
+    type: attribute
+
+index:
+    path: /index
+    controller: App\Controller\Controller::index
+
+aboutUs:
+    path: /aboutUs
+    controller: App\Controller\Controller::aboutUs
+
+products:
+    path: /products
+    controller: App\Controller\Controller::products
+
+contactUs:
+    path: /contactUs
+    controller: App\Controller\Controller::contactUs
+
+ajoutContactConfirm:
+    path: /ajoutContactConfirm
+    controller: App\Controller\Controller::ajoutContactConfirm
+
+
+
