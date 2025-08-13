@@ -1,0 +1,66 @@
+@startuml
+actor "Client" as Client
+participant "User" as User
+participant "Panier" as Panier
+participant "Produit" as Produit
+participant "Contact" as Contact
+participant "Commande" as Commande
+
+group Authentification
+    Client -> User : seConnecter(username, password)
+    alt Nouvel utilisateur
+        User -> User : Créer compte
+    else Utilisateur existant
+        User -> User : Vérifier coordonnées
+    end
+    User --> Client : Confirmation connexion
+end
+
+group Gestion panier
+    Client -> Produit : ListerProduits()
+    Produit --> Client : Liste des produits affichée
+    
+    Client -> Panier : ajouter produit au panier
+  alt Si NOUVEAU produit
+      Panier --> Client : "Produit ajouté au panier"
+  else Si produit EXISTE déjà
+      Panier --> Client : "Quantité mise à jour dans votre panier"
+  end
+
+Client -> Panier : augmenterQuantité(produit_id)
+activate Panier
+    Panier -> Panier : quantité++
+    Panier --> Client : "Quantité augmentée"
+deactivate Panier
+    Client -> Panier : diminuerQuantité(produit_id)
+activate Panier
+    Panier -> Panier : quantité--
+    Panier --> Client : "Quantité diminuée"
+deactivate Panier
+Client -> Panier : SupprimerProduit(produit_id)
+    Panier --> Client : alerte: "Cliquez sur OK pour confirmer la suppression du produit \nCliquez sur Annuler pour annuler la suppression du produit."
+    
+    alt OK
+        Panier --> Client : "Produit supprimé du panier"
+    else Annuler
+        Panier --> Client : "Suppression du produit annulée"
+    end
+
+end
+
+group Finalisation commande
+    Client -> Contact : envoyerMessage(nom, email, num_tel, message)
+    Contact -> User : Lier au user_id
+    Contact --> Client : Message envoyé
+    
+    alt Passage commande
+        Client -> Commande : validerCommande(panier_id)
+        Commande -> Panier : Récupérer articles
+        Commande -> Commande : CalculerTotal()
+        Commande --> Client : Confirmation commande
+    else Déconnexion
+        Client -> User : seDeconnecter()
+        User --> Client : Session terminée
+    end
+end
+@enduml

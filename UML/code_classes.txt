@@ -1,0 +1,56 @@
+@startuml
+
+class User {
+  +id: int
+  +username: string
+  +password: string
+  +role: string
+  +seConnecter()
+  +seDeconnecter()
+}
+
+class Panier {
+  +id: int
+  +nom_produit: string
+  +quantite: int
+  +date_ajout: Date
+  +utilisateur_id: int
+  +ajouterProduit()
+  +modifierQuantite()
+  +supprimerProduit()
+}
+
+class Contact {
+  +id: int
+  +nom: string
+  +email: string
+  +num_tel: string
+  +message: string
+  +user_id: int
+  +envoyerMessage()
+}
+
+class Produit {
+  +id: int
+  +nom: string
+  +prix: float
+}
+
+class Commande {
+  +id: int
+  +date_commande: Date
+  +statut: string
+  +total: float
+  +user_id: int
+  +validerCommande()
+}
+
+' Relations avec verbes d'action
+User "1" *-- "0..*" Contact : "possède"
+User "1" *-- "0..*" Panier : "gère"
+User "1" *-- "0..*" Commande : "passe"
+
+Panier "1" --> "0..*" Produit : "contient"
+Commande "1" --> "1..*" Produit : "contient"
+
+@enduml

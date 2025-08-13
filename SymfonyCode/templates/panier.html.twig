@@ -2,6 +2,87 @@
 {% block title %}Panier{% endblock %}
 {% block body %}
 
+{% for message in app.flashes('success') %}
+    <div class="flash-notification" style="position: fixed;
+                                      top: 20px;
+                                      left: 50%;
+                                      transform: translateX(-50%);
+                                      background: #30d135ff;
+                                      color: white;
+                                      padding: 15px;
+                                      border-radius: 5px;
+                                      z-index: 1000;
+                                      display: flex;
+                                      align-items: center;
+                                      gap: 10px;">
+        {{ message }}
+        <button onclick="this.parentElement.remove()" 
+                style="margin-left: 15px;
+                       background: white;
+                       color: #30d135ff;
+                       border: none;
+                       border-radius: 3px;
+                       padding: 3px 8px;
+                       cursor: pointer;">
+            OK
+        </button>
+    </div>
+{% endfor %}
+
+{% for message in app.flashes('warning') %}
+    <div class="flash-notification" style="position: fixed;
+                                      top: 20px;
+                                      left: 50%;
+                                      transform: translateX(-50%);
+                                      background: #e1b505ff;
+                                      color: white;
+                                      padding: 15px;
+                                      border-radius: 5px;
+                                      z-index: 1000;
+                                      display: flex;
+                                      align-items: center;
+                                      gap: 10px;">
+        {{ message }}
+        <button onclick="this.parentElement.remove()" 
+                style="margin-left: 15px;
+                       background: white;
+                       color:  #e1b505ff;
+                       border: none;
+                       border-radius: 3px;
+                       padding: 3px 8px;
+                       cursor: pointer;">
+            OK
+        </button>
+    </div>
+{% endfor %}
+
+{% for message in app.flashes('danger') %}
+    <div class="flash-notification" style="position: fixed;
+                                      top: 20px;
+                                      left: 50%;
+                                      transform: translateX(-50%);
+                                      background: #f44336;
+                                      color: white;
+                                      padding: 15px;
+                                      border-radius: 5px;
+                                      z-index: 1000;
+                                      display: flex;
+                                      align-items: center;
+                                      gap: 10px;">
+        {{ message }}
+        <button onclick="this.parentElement.remove()" 
+                style="margin-left: 15px;
+                       background: white;
+                       color: #f44336;
+                       border: none;
+                       border-radius: 3px;
+                       padding: 3px 8px;
+                       cursor: pointer;">
+            OK
+        </button>
+    </div>
+{% endfor %}
+
 <section class="sub-header">
     <nav>
         <a href="/index"><img src="images/4bois1.jpeg"></a>
@@ -69,9 +150,11 @@
                                         <i class="fas fa-minus"></i>
                                     </a>
                                     <a href="{{ path('panier_supprimer', {'id': item.id}) }}" 
-                                       class="btn btn-sm btn-outline-danger" title="Supprimer">
+                                    class="btn btn-sm btn-outline-danger btn-delete" 
+                                    data-id="{{ item.id }}" title="Supprimer">
                                         <i class="fas fa-trash-alt"></i>
                                     </a>
+
                                 </div>
                             </td>
                         </tr>
@@ -82,5 +165,97 @@
         
     {% endif %}
 </div>
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Fonction pour afficher une notification
+            function showNotification(message, type = 'danger') { // 'danger' par défaut
+                // Supprimer les notifications existantes
+                document.querySelectorAll('.flash-notification').forEach(n => n.remove());
+                
+                const colors = {
+                    'success': '#4CAF50',
+                    'warning': '#ff9843ff',
+                    'danger': '#ff1100ff'
+                };
+                
+                const bgColor = colors[type] || colors['danger'];
+                
+                // Créer la notification
+                const notif = document.createElement("div");
+                notif.className = "flash-notification";
+                notif.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    background: ${bgColor};
+                    color: white;
+                    padding: 15px;
+                    border-radius: 5px;
+                    z-index: 1000;
+                    display: flex;
+                    align-items: center;
+                    gap: 10px;
+                    animation: fadeIn 0.3s ease-in-out;
+                `;
+                
+                notif.innerHTML = `
+                    ${message}
+                    <button onclick="this.parentElement.remove()" 
+                            style="margin-left: 15px;
+                                   background: white;
+                                   color: ${bgColor};
+                                   border: none;
+                                   border-radius: 3px;
+                                   padding: 3px 8px;
+                                   cursor: pointer;">
+                        OK
+                    </button>
+                `;
+                
+                document.body.appendChild(notif);
+                
+                // Disparition automatique après 5s
+                setTimeout(() => {
+                    if (notif.parentNode) {
+                        notif.style.animation = 'fadeOut 0.3s ease-in-out';
+                        setTimeout(() => notif.remove(), 300);
+                    }
+                }, 5000);
+            }
+
+            // Gestion des boutons de suppression
+            document.querySelectorAll(".btn-delete").forEach(function (btn) {
+                btn.addEventListener("click", function (e) {
+                    e.preventDefault();
+                    const url = this.getAttribute("href");
+
+                    if (confirm("Cliquez sur OK pour confirmer la suppression du produit \nCliquez sur Annuler pour annuler la suppression du produit.")) {
+                        window.location.href = url; // La notification sera gérée par Symfony
+                    } else {
+                        showNotification("Suppression du produit annulée", 'danger');
+                    }
+                });
+            });
+        });
+
+        // Animations CSS
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes fadeIn {
+                from { opacity: 0; transform: translate(-50%, -20px); }
+                to { opacity: 1; transform: translate(-50%, 0); }
+            }
+            @keyframes fadeOut {
+                from { opacity: 1; transform: translate(-50%, 0); }
+                to { opacity: 0; transform: translate(-50%, -20px); }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+{% endblock %}
 
 {% endblock %}

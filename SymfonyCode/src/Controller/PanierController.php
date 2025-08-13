@@ -70,6 +70,8 @@ class PanierController extends AbstractController
 
         $panier->setQuantite($panier->getQuantite() + 1);
         $em->flush();
+        
+        $this->addFlash('success', 'Quantité augmentée');
 
         return $this->redirectToRoute('panier_index');
     }
@@ -86,6 +88,7 @@ class PanierController extends AbstractController
         if ($panier->getQuantite() > 1) {
             $panier->setQuantite($panier->getQuantite() - 1);
             $em->flush();
+            $this->addFlash('warning', 'Quantité diminuée');
         } else {
             $em->remove($panier);
             $em->flush();
