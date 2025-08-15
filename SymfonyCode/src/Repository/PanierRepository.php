@@ -5,6 +5,8 @@ namespace App\Repository;
 use App\Entity\Panier;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+
 
 /**
  * @extends ServiceEntityRepository<Panier>

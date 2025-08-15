@@ -2,12 +2,20 @@
 namespace App\Controller;
 
 use App\Entity\Panier;
+use App\Entity\Commande;
+
+use App\Repository\ContactRepository;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+
 
 class PanierController extends AbstractController
 {
@@ -34,10 +42,12 @@ class PanierController extends AbstractController
     {
         $user = $this->security->getUser();
         $nomProduit = $request->request->get('nom_produit');
+        $prixProduit = $request->request->get('prix_produit');
 
         $panierExist = $em->getRepository(Panier::class)->findOneBy([
             'utilisateur' => $user,
-            'nomProduit' => $nomProduit
+            'nomProduit' => $nomProduit,
+            'prixProduit' => $prixProduit
         ]);
 
         if ($panierExist) {
@@ -48,6 +58,7 @@ class PanierController extends AbstractController
             $panier = new Panier();
             $panier->setUtilisateur($user)
                    ->setNomProduit($nomProduit)
+                   ->setprixProduit($prixProduit)
                    ->setQuantite(1)
                    ->setDateAjout(new \DateTime());
             
@@ -128,4 +139,59 @@ class PanierController extends AbstractController
         $this->addFlash('danger', 'Panier vidé avec succès');
         return $this->redirectToRoute('panier_index');
     }
+
+    #[Route('/panier/passer-commande', name: 'passer_commande')]
+    public function passerCommande(): void
+    {
+        throw new \LogicException('Intercepté automatiquement par Symfony.');
+    }
+
+    #[Route('/panier/passer-commande-check', name: 'passer_commande_check')]
+public function passerCommandeCheck(
+    ContactRepository $contactRepository,
+    UrlGeneratorInterface $urlGenerator,
+    TokenStorageInterface $tokenStorage,
+    EntityManagerInterface $em
+): RedirectResponse {
+    $user = $this->getUser();
+
+    if (!$user) {
+        return $this->redirectToRoute('app_login');
+    }
+
+    // Vérifie si l'utilisateur a rempli le formulaire de contact
+    $hasContact = $contactRepository->findOneBy(['user' => $user]);
+
+    if (!$hasContact) {
+        $this->addFlash('error', 'Veuillez remplir le formulaire d\'abord ?');
+        return $this->redirectToRoute('contactUs');
+    }
+
+    // Calcul du prix total (nouvelle partie ajoutée)
+    $paniers = $em->getRepository(Panier::class)->findBy(['utilisateur' => $user]);
+    $total = 0;
+    
+    foreach ($paniers as $panier) {
+        $prix = (float) str_replace('DH', '', $panier->getPrixProduit());
+        $total += $prix * $panier->getQuantite();
+    }
+
+    // Création de la commande avec le total (nouvelle partie ajoutée)
+    $commande = new Commande();
+    $commande->setUtilisateur($user)
+             ->setDateCommande(new \DateTimeImmutable())
+             ->setStatut('en_attente')
+             ->setPrixTotal($total);
+    $em->persist($commande);
+
+    // Vidage du panier (existant)
+    foreach ($paniers as $panier) {
+        $em->remove($panier);
+    }
+    $em->flush();
+
+    $this->addFlash('success', 'Commande passée avec succès. Total: '.$total.' DH');
+    return $this->redirectToRoute('panier_index');
+}
+
 }

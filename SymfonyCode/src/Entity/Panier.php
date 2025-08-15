@@ -20,11 +20,15 @@ class Panier
     #[ORM\Column(length: 255)]
     private ?string $nomProduit = null;
 
+    #[ORM\Column(length: 50)] 
+    private ?string $prixProduit = null; 
+
     #[ORM\Column]
     private int $quantite = 0;
 
     #[ORM\Column(type: 'datetime')]
     private ?\DateTimeInterface $dateAjout = null;
+
 
     public function __construct()
     {
@@ -56,6 +60,18 @@ class Panier
     public function setNomProduit(string $nomProduit): static
     {
         $this->nomProduit = $nomProduit;
+
+        return $this;
+    }
+
+    public function getPrixProduit(): ?string
+    {
+        return $this->prixProduit;
+    }
+
+    public function setPrixProduit(string $prixProduit): static
+    {
+        $this->prixProduit = $prixProduit;
 
         return $this;
     }

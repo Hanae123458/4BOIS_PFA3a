@@ -42,7 +42,7 @@ class Controller extends AbstractController{
         $nom = $request->request->get('nom');
         $email = $request->request->get('email');
         $numTel = $request->request->get('numTel');
-        $message = $request->request->get('message');
+        $message = $request->request->get('message') ?? '';
         $user = $this->getUser(); 
 
        $errors = [];
@@ -60,13 +60,9 @@ class Controller extends AbstractController{
         } elseif (!preg_match('/^[0-9]{10}$/', $numTel)) {
             $errors[] = "Le numéro de téléphone doit contenir exactement 10 chiffres.";
         }
-        if (empty($message)) {
-            $errors[] = "Le message est requis.";
-        }
         if (!$user) {
-            $errors[] = "Vous devez être connecté pour envoyer un message.";
+            $errors[] = "Vous devez être connecté pour remplir le formulaire de contact.";
         }
-
         if (!empty($errors)) {
             return $this->render('erreurContact.html.twig', [
             'errors' => $errors,

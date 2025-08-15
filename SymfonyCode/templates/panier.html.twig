@@ -128,6 +128,7 @@
                 <thead class="table-dark">
                     <tr>
                         <th>Produit</th>
+                        <th>Prix</th>
                         <th>Date d'ajout</th>
                         <th>Quantité</th>
                         <th>Actions</th>
@@ -137,6 +138,7 @@
                     {% for item in panier %}
                         <tr>
                             <td>{{ item.nomProduit }}</td>
+                            <td>{{ item.prixProduit }}</td>
                             <td class="text-center">{{ item.dateAjout|date('d/m/Y H:i') }}</td>
                             <td class="text-center">{{ item.quantite }}</td>
                             <td class="text-center">
@@ -155,12 +157,23 @@
                                         <i class="fas fa-trash-alt"></i>
                                     </a>
 
+                                    
                                 </div>
                             </td>
                         </tr>
                     {% endfor %}
                 </tbody>
             </table>
+        
+        </div>
+
+        {# Bouton Passer la commande #}
+        <div style=" margin-bottom: 2%; display:flex; justify-content: center; align-items: center;">
+            <a href="{{ path('passer_commande_check') }}" 
+                class="btn btn-sm" 
+                style="background-color: #b2642e; color: white; font-size: 1.2rem; padding: 12px 25px;" >
+                <i class="fas fa-shopping-cart"> Passer la commande</i>
+            </a>
         </div>
         
     {% endif %}
