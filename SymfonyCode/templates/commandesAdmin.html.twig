@@ -1,0 +1,108 @@
+{% extends "base.html.twig" %}
+{% block title %}Produits{% endblock %}
+{% block body %}
+
+{% for message in app.flashes('success') %}
+        <div class="flash-notification" style="position: fixed;
+                                          top: 20px;
+                                          left: 50%;
+                                          transform: translateX(-50%);
+                                          background: #29dd05ff;
+                                          color: white;
+                                          padding: 15px;
+                                          border-radius: 5px;
+                                          z-index: 1000;
+                                          display: flex;
+                                          align-items: center;
+                                          gap: 10px;">
+            {{ message }}
+            <button onclick="this.parentElement.remove()" 
+                    style="margin-left: 15px;
+                           background: white;
+                           color: #29dd05ff;
+                           border: none;
+                           border-radius: 3px;
+                           padding: 3px 8px;
+                           cursor: pointer;">
+                OK
+            </button>
+        </div>
+{% endfor %}
+
+<section class="sub-header">
+        <nav>
+            <a href="/index"><img src="images/4bois1.jpeg"></a>
+            <div class="nav-links" id="nav-links">
+                <i class="fa fa-times" onclick="hideMenu()"></i>
+                <ul>
+                    <li><a href="/index">ACCUEIL</a></li>
+                    <li><a href="/aboutUs">À PROPOS</a></li>
+                    <li><a href="/produitsAdmin">PRODUITS</a></li>
+                    <li><a href="/commandesAdmin">COMMANDES</a></li>
+                    
+                    {% if app.user %}
+                        <li class="nav-item">
+                            <span class="nav-link" style="color: white !important;"><i class="bi bi-person-circle me-1"></i>{{ app.user.username }}</span> 
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ path('app_logout_check') }}"><i class="bi bi-box-arrow-right me-1"></i>DÉCONNEXION</a>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="/login"><i class="bi bi-box-arrow-in-right me-1"></i>CONNEXION</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+            <i class="fa fa-bars" onclick="showMenu()"></i>
+        </nav>
+</section>
+
+<!-- commandes -->
+<div style="text-align: center; margin: 20px 0; color: #100060ff;">
+    <h1>Liste des commandes</h1>
+</div>
+
+<div style=" flex: 1; overflow-y: auto; margin: 0 20px; display: flex; justify-content: center; align-items: center; height: 78.5vh;">
+<table border="1" cellpadding="10">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Utilisateur_ID</th>
+            <th>Date de commande</th>
+            <th>Statut de commande</th>
+            <th>Prix total</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for commande in commandes %}
+            <tr>
+                <td>{{ commande.id }}</td>
+                <td>{{ commande.utilisateur.id }}</td>
+                <td>{{ commande.dateCommande|date('d/m/Y H:i') }}</td>
+                <td>
+                    <form method="post" style="display: inline;">
+                        <input type="hidden" name="commande_id" value="{{ commande.id }}">
+                        <select name="statut" onchange="this.form.submit()" 
+                                style="padding: 5px; border-radius: 4px; border: 1px solid #ddd;">
+                            {% for key, value in constant('App\\Entity\\Commandes::STATUTS') %}
+                                <option value="{{ key }}" {{ commande.statut == key ? 'selected' : '' }}>
+                                    {{ value }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </form>
+                </td>
+                <td>{{ commande.prixTotal|number_format(2, ',', ' ') }} DH</td>
+
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5">Aucune commande trouvée.</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+</div>
+
+{% endblock %}

@@ -1,0 +1,153 @@
+{% extends "base.html.twig" %}
+{% block title %}Modifier un produit{% endblock %}
+{% block body %}
+
+<section class="sub-header">
+        <nav>
+            <a href="/index"><img src="images/4bois1.jpeg"></a>
+            <div class="nav-links" id="nav-links">
+                <i class="fa fa-times" onclick="hideMenu()"></i>
+                <ul>
+                    <li><a href="/index">ACCUEIL</a></li>
+                    <li><a href="/aboutUs">À PROPOS</a></li>
+                    <li><a href="/produitsAdmin">PRODUITS</a></li>
+                    <li><a href="/commandesAdmin">COMMANDES</a></li>
+                    
+                    {% if app.user %}
+                        <li class="nav-item">
+                            <span class="nav-link" style="color: white !important;"><i class="bi bi-person-circle me-1"></i>{{ app.user.username }}</span> 
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ path('app_logout_check') }}"><i class="bi bi-box-arrow-right me-1"></i>DÉCONNEXION</a>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="/login"><i class="bi bi-box-arrow-in-right me-1"></i>CONNEXION</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+            <i class="fa fa-bars" onclick="showMenu()"></i>
+        </nav>
+</section>
+
+<!-- Modifier un produit -->
+<section class="form-container">
+  <h1>Modifier le produit</h1>
+  
+  <form method="post" enctype="multipart/form-data">
+    <div class="form-group">
+      <label for="nomProduit">Nom du produit :</label>
+      <input id="nomProduit" type="text" name="nomProduit" value="{{ produit.nomProduit }}" required>
+    </div>
+
+    <div class="form-group">
+      <label for="prixProduit">Prix du produit :</label>
+      <input id="prixProduit" type="text" name="prixProduit" value="{{ produit.prixProduit }}" pattern="^\d+(\.\d{1,2})?$" required>
+    </div>
+
+    <div class="form-group">
+      <label>Image Avant actuelle :</label>
+      <img src="{{ asset('uploads/' ~ produit.imageProduitAvant) }}" style="max-width: 200px; display: block; margin: 10px 0; border: 1px solid #ddd; border-radius: 4px;">
+      <label for="imageProduitAvant">Nouvelle image Avant :</label>
+      <input id="imageProduitAvant" type="file" name="imageProduitAvant" accept="image/*">
+    </div>
+
+    <div class="form-group">
+      <label>Image Après actuelle :</label>
+      <img src="{{ asset('uploads/' ~ produit.imageProduitApres) }}" style="max-width: 200px; display: block; margin: 10px 0; border: 1px solid #ddd; border-radius: 4px;">
+      <label for="imageProduitApres">Nouvelle image Après :</label>
+      <input id="imageProduitApres" type="file" name="imageProduitApres" accept="image/*">
+    </div>
+
+    <div class="form-group" style="display: flex; gap: 15px;">
+      <button type="submit" class="btn-submit">Enregistrer</button>
+      <a href="{{ path('produits_admin') }}" class="btn-cancel">Annuler</a>
+    </div>
+  </form>
+</section>
+
+<style>
+.form-container {
+    max-width: 700px;
+    margin: 50px auto;
+    padding: 30px 40px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+    font-family: Arial, sans-serif;
+}
+
+.form-container h1 {
+    text-align: center;
+    color: #853903ff;
+    margin-bottom: 30px;
+    font-size: 28px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #333333;
+}
+
+.form-group input[type="text"],
+.form-group input[type="file"] {
+    padding: 10px 15px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 16px;
+    transition: border-color 0.3s;
+}
+
+.form-group input[type="text"]:focus,
+.form-group input[type="file"]:focus {
+    border-color: #b2642e;
+    outline: none;
+}
+
+.btn-submit {
+    flex: 1;
+    padding: 12px;
+    background-color: #b2642e;
+    color: white;
+    font-size: 18px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.btn-submit:hover {
+    background-color: #c97438ff;
+}
+
+.btn-cancel {
+    flex: 1;
+    padding: 12px;
+    background-color:  #ff0606ff;
+    color: white;
+    font-size: 18px;
+    text-align: center;
+    border-radius: 6px;
+    text-decoration: none;
+    transition: background-color 0.3s;
+}
+
+.btn-cancel:hover {
+    background-color: #f44336;
+}
+
+img {
+    max-height: 150px;
+    object-fit: contain;
+}
+</style>
+
+{% endblock %}

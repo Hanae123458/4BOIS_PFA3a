@@ -2,19 +2,18 @@
 
 namespace App\Repository;
 
-use App\Entity\Commande;
+use App\Entity\Commandes;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<Commande>
+ * @extends ServiceEntityRepository<Commandes>
  */
-class CommandeRepository extends ServiceEntityRepository
+class CommandesRepository extends ServiceEntityRepository
 {
-    public function __construct()
+    public function __construct(ManagerRegistry $registry)
     {
-        $this->dateCommande = new \DateTimeImmutable();
-        $this->statut = 'En attente';
+        parent::__construct($registry, Commandes::class);
     }
 
     public function findByUserId(int $userId): array
@@ -28,7 +27,7 @@ class CommandeRepository extends ServiceEntityRepository
     }
 
     //    /**
-    //     * @return Commande[] Returns an array of Commande objects
+    //     * @return Commandes[] Returns an array of Commandes objects
     //     */
     //    public function findByExampleField($value): array
     //    {
@@ -42,7 +41,7 @@ class CommandeRepository extends ServiceEntityRepository
     //        ;
     //    }
 
-    //    public function findOneBySomeField($value): ?Commande
+    //    public function findOneBySomeField($value): ?Commandes
     //    {
     //        return $this->createQueryBuilder('c')
     //            ->andWhere('c.exampleField = :val')

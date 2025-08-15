@@ -2,7 +2,7 @@
 namespace App\Controller;
 
 use App\Entity\Panier;
-use App\Entity\Commande;
+use App\Entity\Commandes;
 
 use App\Repository\ContactRepository;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -149,8 +149,6 @@ class PanierController extends AbstractController
     #[Route('/panier/passer-commande-check', name: 'passer_commande_check')]
 public function passerCommandeCheck(
     ContactRepository $contactRepository,
-    UrlGeneratorInterface $urlGenerator,
-    TokenStorageInterface $tokenStorage,
     EntityManagerInterface $em
 ): RedirectResponse {
     $user = $this->getUser();
@@ -163,11 +161,11 @@ public function passerCommandeCheck(
     $hasContact = $contactRepository->findOneBy(['user' => $user]);
 
     if (!$hasContact) {
-        $this->addFlash('error', 'Veuillez remplir le formulaire d\'abord ?');
+        $this->addFlash('error', 'Veuillez remplir le formulaire de contact d\'abord');
         return $this->redirectToRoute('contactUs');
     }
 
-    // Calcul du prix total (nouvelle partie ajoutée)
+    // Calcul du prix total
     $paniers = $em->getRepository(Panier::class)->findBy(['utilisateur' => $user]);
     $total = 0;
     
@@ -176,15 +174,15 @@ public function passerCommandeCheck(
         $total += $prix * $panier->getQuantite();
     }
 
-    // Création de la commande avec le total (nouvelle partie ajoutée)
-    $commande = new Commande();
+    // Création de la commande avec le statut correct
+    $commande = new Commandes();
     $commande->setUtilisateur($user)
-             ->setDateCommande(new \DateTimeImmutable())
-             ->setStatut('en_attente')
-             ->setPrixTotal($total);
+            ->setDateCommande(new \DateTimeImmutable())
+            ->setStatut(Commandes::STATUT_EN_ATTENTE) // Utilisez la constante ici
+            ->setPrixTotal($total);
     $em->persist($commande);
 
-    // Vidage du panier (existant)
+    // Vidage du panier
     foreach ($paniers as $panier) {
         $em->remove($panier);
     }
@@ -193,5 +191,4 @@ public function passerCommandeCheck(
     $this->addFlash('success', 'Commande passée avec succès. Total: '.$total.' DH');
     return $this->redirectToRoute('panier_index');
 }
-
 }
