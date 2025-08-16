@@ -1,0 +1,140 @@
+{# templates/homeAdmin.html.twig #}
+{% extends "base.html.twig" %}
+{% block title %}Accueil Admin{% endblock %}
+
+{% block body %}
+
+<section class="header">
+    <nav>
+        <a href="/homeAdmin"><img src="images/4bois1.jpeg"></a> 
+        <div class="nav-links" id="nav-links">
+            <i class="fa fa-times" onclick="hideMenu()"></i>
+            <ul>
+                <li><a href="/homeAdmin">ACCUEIL</a></li>
+                <li><a href="/produitsAdmin">PRODUITS</a></li>
+                <li><a href="/commandesAdmin">COMMANDES</a></li>
+                <li><a href="/contactsAdmin">CONTACTS</a></li>
+
+                {% if app.user %}
+                    <li class="nav-item">
+                        <span class="nav-link" style="color: white !important;">
+                            <i class="bi bi-person-circle me-1"></i>{{ app.user.username }}
+                        </span> 
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ path('app_logout') }}">
+                            <i class="bi bi-box-arrow-right me-1"></i>DÉCONNEXION
+                        </a>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="/login">
+                            <i class="bi bi-box-arrow-in-right me-1"></i>CONNEXION
+                        </a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
+        <i class="fa fa-bars" onclick="showMenu()"></i>
+    </nav>        
+
+    <div class="text-box">
+        <h1>Bienvenue dans l'espace administrateur</h1>
+        <p>Gérez vos produits, commandes et contacts facilement</p>
+
+        <!-- Tableau de bord / Statistiques rapides placé directement ici -->
+        <section class="admin-overview">
+            <div class="overview-cards">
+                <div class="card">
+                    <h3>Produits</h3>
+                    <p><a href="/produitsAdmin">Gérer les produits</a></p>
+                </div>
+                <div class="card">
+                    <h3>Commandes</h3>
+                    <p><a href="/commandesAdmin">Gérer les commandes</a></p>
+                </div>
+                <div class="card">
+                    <h3>Contacts</h3>
+                    <p><a href="/contactsAdmin">Voir les contacts</a></p>
+                </div>
+            </div>
+        </section>
+
+    </div>
+</section>
+
+<style>
+.text-box {
+    margin-top: 30px;  /* ajuste la valeur pour reculer vers le bas */
+    text-align: center;
+    color: white;
+    text-shadow: 1px 1px 5px rgba(0,0,0,0.5); /* lisibilité sur image */
+}
+/* --- Section tableau de bord rapide --- */
+.admin-overview {
+    margin-top: 30px;
+    text-align: center;
+    color: white; /* pour être lisible sur image */
+}
+
+.admin-overview h2 {
+    font-size: 1.8rem;
+    margin-bottom: 25px;
+    font-weight: 600;
+    text-shadow: 1px 1px 5px rgba(0,0,0,0.5); /* meilleure lisibilité sur image */
+}
+
+/* Disposition en ligne */
+.overview-cards {
+    display: flex;
+    justify-content: center;
+    gap: 25px;
+    flex-wrap: wrap;
+}
+
+/* Style des cartes individuelles */
+.overview-cards .card {
+    background: rgba(255, 255, 255, 0.1); /* transparent sur image */
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    backdrop-filter: blur(5px); /* effet verre dépoli */
+    padding: 20px 25px;
+    border-radius: 12px;
+    width: 220px;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.overview-cards .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+}
+
+/* Titres des cartes */
+.overview-cards .card h3 {
+    font-size: 1.3rem;
+    margin-bottom: 12px;
+    color: #fff;
+}
+
+/* Boutons dans cartes */
+.overview-cards .card a {
+    display: inline-block;
+    text-decoration: none;
+    color: #fff;
+    background: #ec0a0aff;
+    padding: 8px 15px;
+    border-radius: 6px;
+    transition: backgroun
+}
+
+.overview-cards .card a:hover {
+    display: inline-block;
+    text-decoration: none;
+    color: #fff;
+    background: #e43838ff;
+    padding: 8px 15px;
+    border-radius: 6px;
+    transition: backgroun
+}
+</style>
+
+{% endblock %}

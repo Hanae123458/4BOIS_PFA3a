@@ -224,7 +224,6 @@ h3{
     height: 1vh; /* Réduit de 30vh à 15vh (50% de réduction) */
     width: 100%;
     padding-top: 0.7%; /* Réduit proportionnellement */
-    
     background-image: linear-gradient(rgba(4, 9, 30, 0.533),rgba(4, 9, 30, 0.188)),url(images/4bois24.jpeg);
     background-position: center;
     background-size: cover;
@@ -315,169 +314,32 @@ input[type="checkbox"]:checked ~ .label-btn1:before, input[type="checkbox"]:chec
 input[type="checkbox"]:checked ~ .toggle-btn:before {
     content: "En savoir moins";
 }
+/*tableau de commandes et de contacts*/
+table thead th {
+    background-color: #c1e5ffff  !important; /* important pour écraser d'autres règles */
+    color: #000; /* pour le texte */
+}
+table tr:nth-child(even) {
+    background-color: #f2f2f2; /* gris clair pour lignes paires */
+}
 
+table tr:nth-child(odd) {
+    background-color: #ffffff; /* blanc pour lignes impaires */
+}
+
+table tr.selected-row {
+    background-color: #da874c !important; /* couleur pour la ligne sélectionnée */
+}
+
+table tr:hover {
+    background-color: #e9ecef; /* gris clair au survol */
+    cursor: pointer;
+}
+    
 /*------------Produits page-----------*/
-.btn-panier {
-    background-color: #5fa9cdff; /* Bleu bébé */
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    font-size: 16px;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
 
-.btn-panier:hover {
-    background-color: #568facff; /* Un bleu bébé légèrement plus foncé au survol */
-}
-.produits{
-    width: 80%;
-    margin: auto;
-    text-align: center;
-    padding-top: 0px;
-}
-.produits .row{
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center; /* centre les colonnes */
-    gap: 30px; /* espace entre les colonnes */
-    margin-top: 25px;
-}
-.produits-col,
-.produits-col1,
-.produits-col2,
-.produits-col3,
-.produits-col4,
-.produits-col5 {
-    flex: 0 1 calc(33.333% - 30px); /* 3 colonnes par ligne avec espace */
-    box-sizing: border-box;
-    border-radius: 10px;
-    margin-bottom: 30px;
-    position: relative;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-.produits-col img,
-.produits-col1 img,
-.produits-col2 img,
-.produits-col3 img,
-.produits-col4 img,
-.produits-col5 img {
-    width: 95%;
-    height: 200px;
-}
-.produits-col .rear-img,
-.produits-col1 .rear-img1,
-.produits-col2 .rear-img2,
-.produits-col3 .rear-img3,
-.produits-col4 .rear-img4,
-.produits-col5 .rear-img5
-{
-    opacity: 0;
-    position: absolute;
-    top: 0;
-    left: 10px;
-    z-index: -1;
-    transition: opacity 0.4s ease-out;
-}
-.produits-col1:hover .rear-img1,
-.produits-col:hover .rear-img,
-.produits-col2:hover .rear-img2,
-.produits-col3:hover .rear-img3,
-.produits-col4:hover .rear-img4,
-.produits-col5:hover .rear-img5
-{
-    opacity: 1;
-    z-index: 0;
-}
-.layer{
-    background: rgba(226,0,0,0.7);
-    height: 100%;
-    width: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
-}
-.dropdown {
-    position: relative;
-    display: inline-block;
-}
-/*----------Panier page---------*/
-.btn {
-    display: inline-block;
-    padding: 6px 10px;
-    margin: 0 3px;
-    border-radius: 6px;
-    font-size: 14px;
-    text-decoration: none;
-    color: white;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-}
 
-.btn-sm {
-    font-size: 12px;
-    padding: 4px 8px;
-}
 
-.btn-outline-success {
-    background-color: #28a745;
-}
-
-.btn-outline-warning {
-    background-color: #ffc107;
-    color: black;
-}
-
-.btn-outline-danger {
-    background-color: #dc3545;
-}
-
-.btn:hover {
-    opacity: 0.85;
-}
-
-/* Pour centrer les icônes à l’intérieur */
-.btn i {
-    margin: 0;
-    pointer-events: none;
-}
-.table th {
-    background-color: #b3c9dfff; 
-}
-
-table {
-    border-collapse: collapse;
-    width: 90%;
-    margin-top: 30px;    
-    margin-bottom: 30px; 
-    margin-left: auto;
-    margin-right: auto;
-}
-
-table, th, td {
-    border: 1px solid #d3d7dbff; 
-}
-
-th, td {
-    padding: 12px 15px;
-    text-align: left;
-}
-
-tr:nth-child(even) {
-    background-color: #f2f2f2; 
-}
-
-tr:hover {
-    background-color: #e9ecef; 
-}
-
-.table-bordered {
-    border: 2px solid #343a40; 
-}
 
 /*----------Contactez-nous page---------*/
 .localistaion{
@@ -652,7 +514,7 @@ section{
               background: white;
               padding: 3rem 3rem;
               border-radius: 12px;
-              box-shadow: 0 6px 15px rgb(241, 203, 255) !important;
+              box-shadow: 0 6px 15px rgba(0, 3, 82, 0.97) !important;
               transition: box-shadow 0.2s;
               width: 100%;
               max-width: 400px;
@@ -696,14 +558,14 @@ section{
               margin-top: 1.5rem;
               border: none;
               border-radius: 8px;
-              background-color:rgba(170, 98, 246, 0.78) !important;
+              background-color: rgba(255, 5, 5, 1)!important;
               color: white;
               font-size: 1rem;
               cursor: pointer;
           }
 
           button.btn:hover {
-              background-color:rgba(117, 6, 235, 0.78) !important;
+              background-color: rgba(241, 93, 93, 1) !important;
           }
 
           p.mt-3 {
@@ -713,7 +575,7 @@ section{
           }
 
           a.btn-link {
-              color: #4f46e5;
+              color: #2c2697ff;
               text-decoration: none;
               font-weight: bold;
           }

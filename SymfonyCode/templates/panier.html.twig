@@ -85,11 +85,11 @@
 
 <section class="sub-header">
     <nav>
-        <a href="/index"><img src="images/4bois1.jpeg"></a>
+        <a href="/home"><img src="images/4bois1.jpeg"></a>
         <div class="nav-links" id="nav-links">
             <i class="fa fa-times" onclick="hideMenu()"></i>
             <ul>
-                <li><a href="/index">ACCUEIL</a></li>
+                <li><a href="/home">ACCUEIL</a></li>
                 <li><a href="/aboutUs">À PROPOS</a></li>
                 <li><a href="/products">PRODUITS</a></li>
                 <li><a href="/panier">PANIER</a></li>
@@ -124,8 +124,8 @@
         
     {% else %}
         <div class="table-responsive" style="display: flex; justify-content: center; align-items: center;height: 78.5vh;">
-            <table class="table table-bordered table-hover">
-                <thead class="table-dark">
+            <table  border="1" cellpadding="10">
+                <thead style="background-color: #c1e5ffff;">
                     <tr>
                         <th>Produit</th>
                         <th>Prix</th>
@@ -178,6 +178,80 @@
         
     {% endif %}
 </div>
+
+<style>
+/*----------Panier page---------*/
+.btn {
+    display: inline-block;
+    padding: 6px 10px;
+    margin: 0 3px;
+    border-radius: 6px;
+    font-size: 14px;
+    text-decoration: none;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.btn-sm {
+    font-size: 12px;
+    padding: 4px 8px;
+}
+
+.btn-outline-success {
+    background-color: #28a745;
+}
+
+.btn-outline-warning {
+    background-color: #ffc107;
+    color: black;
+}
+
+.btn-outline-danger {
+    background-color: #dc3545;
+}
+
+.btn:hover {
+    opacity: 0.85;
+}
+
+/* Pour centrer les icônes à l’intérieur */
+.btn i {
+    margin: 0;
+    pointer-events: none;
+}
+
+table {
+    border-collapse: collapse;
+    width: 90%;
+    margin-top: 30px;    
+    margin-bottom: 30px; 
+    margin-left: auto;
+    margin-right: auto;
+}
+
+table, th, td {
+    border: 1px solid #d3d7dbff; 
+}
+
+th, td {
+    padding: 12px 15px;
+    text-align: left;
+}
+
+tr:nth-child(even) {
+    background-color: #f2f2f2; 
+}
+
+tr:hover {
+    background-color: #e9ecef; 
+}
+
+.table-bordered {
+    border: 2px solid #343a40; 
+}
+
+</style>
 
 {% block javascripts %}
     {{ parent() }}

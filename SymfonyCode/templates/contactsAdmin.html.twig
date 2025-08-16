@@ -1,0 +1,68 @@
+{% extends "base.html.twig" %}
+{% block title %}Produits{% endblock %}
+{% block body %}
+
+<section class="sub-header">
+        <nav>
+            <a href="/homeAdmin"><img src="images/4bois1.jpeg"></a>
+            <div class="nav-links" id="nav-links">
+                <i class="fa fa-times" onclick="hideMenu()"></i>
+                <ul>
+                    <li><a href="/homeAdmin">ACCUEIL</a></li>
+                    <li><a href="/produitsAdmin">PRODUITS</a></li>
+                    <li><a href="/commandesAdmin">COMMANDES</a></li>
+                    <li><a href="/contactsAdmin">CONTACTS</a></li>
+                    
+                    {% if app.user %}
+                        <li class="nav-item">
+                            <span class="nav-link" style="color: white !important;"><i class="bi bi-person-circle me-1"></i>{{ app.user.username }}</span> 
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ path('app_logout') }}"><i class="bi bi-box-arrow-right me-1"></i>DÉCONNEXION</a>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="/login"><i class="bi bi-box-arrow-in-right me-1"></i>CONNEXION</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+            <i class="fa fa-bars" onclick="showMenu()"></i>
+        </nav>
+</section>
+
+<!-- contacts -->
+<div style="text-align: center; margin: 20px 0; color: #100060ff;">
+    <h1>Liste des contacts</h1>
+</div>
+
+<div style="display: flex; justify-content: center; align-items: center; height: 78.5vh;">
+<table border="1" cellpadding="10">
+    <thead style="background-color: #c1e5ffff;">
+        <tr>
+            <th>ID de l'utilisateur</th>
+            <th>Nom complet de l'utilisateur</th>
+            <th>Email</th>
+            <th>Numéro de téléphone</th>
+            <th>Message</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for contact in contacts %}
+            <tr class="{{ selectedUserId == contact.user.id ? 'selected-row' : '' }}">
+                <td>{{ contact.user.id }}</td>
+                <td>{{ contact.nom }}</td>
+                <td>{{ contact.email }}</td>
+                <td>{{ contact.numTel }}</td>
+                <td>{{ contact.message }}</td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5">Aucune contact trouvé.</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+</div>
+
+{% endblock %}

@@ -31,21 +31,21 @@
 
 <section class="sub-header">
         <nav>
-            <a href="/index"><img src="images/4bois1.jpeg"></a>
+            <a href="/homeAdmin"><img src="images/4bois1.jpeg"></a>
             <div class="nav-links" id="nav-links">
                 <i class="fa fa-times" onclick="hideMenu()"></i>
                 <ul>
-                    <li><a href="/index">ACCUEIL</a></li>
-                    <li><a href="/aboutUs">À PROPOS</a></li>
+                    <li><a href="/homeAdmin">ACCUEIL</a></li>
                     <li><a href="/produitsAdmin">PRODUITS</a></li>
                     <li><a href="/commandesAdmin">COMMANDES</a></li>
+                    <li><a href="/contactsAdmin">CONTACTS</a></li>
                     
                     {% if app.user %}
                         <li class="nav-item">
                             <span class="nav-link" style="color: white !important;"><i class="bi bi-person-circle me-1"></i>{{ app.user.username }}</span> 
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ path('app_logout_check') }}"><i class="bi bi-box-arrow-right me-1"></i>DÉCONNEXION</a>
+                            <a class="nav-link" href="{{ path('app_logout') }}"><i class="bi bi-box-arrow-right me-1"></i>DÉCONNEXION</a>
                         </li>
                     {% else %}
                         <li class="nav-item">
@@ -63,29 +63,36 @@
     <h1>Liste des commandes</h1>
 </div>
 
-<div style=" flex: 1; overflow-y: auto; margin: 0 20px; display: flex; justify-content: center; align-items: center; height: 78.5vh;">
+<div style="display: flex; justify-content: center; align-items: center; height: 78.5vh;">
 <table border="1" cellpadding="10">
-    <thead>
+    <thead  style="background-color: #c1e5ffff !important;">
         <tr>
             <th>ID</th>
-            <th>Utilisateur_ID</th>
+            <th>ID de l'utilisateur</th>
+            <th>Produits commandés</th>
             <th>Date de commande</th>
             <th>Statut de commande</th>
             <th>Prix total</th>
+            <th>Action</th>
         </tr>
     </thead>
     <tbody>
         {% for commande in commandes %}
-            <tr>
+            <tr class="{{ selectedUserId == commande.utilisateur.id ? 'selected-row' : '' }}">
                 <td>{{ commande.id }}</td>
                 <td>{{ commande.utilisateur.id }}</td>
+                <td>
+                    {% for ligne in commande.lignes %}
+                        {{ ligne.nomProduit }} (x{{ ligne.quantite }}) - {{ ligne.prixProduit|number_format(2, ',', ' ') }} DH<br>
+                    {% endfor %}
+                </td>
                 <td>{{ commande.dateCommande|date('d/m/Y H:i') }}</td>
                 <td>
                     <form method="post" style="display: inline;">
                         <input type="hidden" name="commande_id" value="{{ commande.id }}">
                         <select name="statut" onchange="this.form.submit()" 
                                 style="padding: 5px; border-radius: 4px; border: 1px solid #ddd;">
-                            {% for key, value in constant('App\\Entity\\Commandes::STATUTS') %}
+                            {% for key, value in constant('App\\Entity\\Commande::STATUTS') %}
                                 <option value="{{ key }}" {{ commande.statut == key ? 'selected' : '' }}>
                                     {{ value }}
                                 </option>
@@ -94,7 +101,11 @@
                     </form>
                 </td>
                 <td>{{ commande.prixTotal|number_format(2, ',', ' ') }} DH</td>
-
+                <td>
+                    <a href="{{ path('contacts_admin', { 'selectedUserId': commande.utilisateur.id }) }}">
+                        Détails de l'utilisateur
+                    </a>
+                </td>
             </tr>
         {% else %}
             <tr>

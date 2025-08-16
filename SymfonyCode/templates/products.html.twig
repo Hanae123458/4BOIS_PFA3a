@@ -31,11 +31,11 @@
 
 <section class="sub-header">
         <nav>
-            <a href="/index"><img src="images/4bois1.jpeg"></a>
+            <a href="/home"><img src="images/4bois1.jpeg"></a>
             <div class="nav-links" id="nav-links">
                 <i class="fa fa-times" onclick="hideMenu()"></i>
                 <ul>
-                    <li><a href="/index">ACCUEIL</a></li>
+                    <li><a href="/home">ACCUEIL</a></li>
                     <li><a href="/aboutUs">À PROPOS</a></li>
                     <li><a href="/products">PRODUITS</a></li>
                     <li><a href="/panier">PANIER</a></li>
@@ -63,346 +63,133 @@
    - <strong>680 DH</strong> correspond à un produit de dimensions 280 cm (longueur) × 210 cm (largeur) × 0,8 cm (épaisseur)<br>
    - <strong>950 DH</strong> correspond à un produit de dimensions 280 cm (longueur) × 210 cm (largeur) × 1,8 cm (épaisseur)
 </p>
+
+
 <!-- produits -->
 <section class="produits" id="produits">
-    <div class="row">
-        <div class="produits-col">
-            <img src="images/MDF1.png" alt="front profuct image">
-            <img src="images/MDF11.jpg" alt="rear product image" class="rear-img">
-            <p>MDF SONOMA</p>
-            <p>Prix: 680DH</p>
+    {% if produits is defined and produits|length > 0 %}
+        {% for produit in produits|batch(3) %}
+            <div class="row">
+                {% for item in produit %}
+                    <div class="produit-item{% if loop.index == 2 %}-col1{% elseif loop.index == 3 %}-col2{% endif %}">
+                        <div class="produit-hover-container">
+                            <img src="{{ asset('uploads/' ~ item.imageProduitAvant) }}" 
+                                 alt="{{ item.nomProduit }}" 
+                                 class="produit-image-front">
+                            <img src="{{ asset('uploads/' ~ item.imageProduitApres) }}" 
+                                 alt="{{ item.nomProduit }} (vue arrière)" 
+                                 class="produit-image-hover">
+                        </div>
+                        <p>{{ item.nomProduit }}</p>
+                        <p>Prix: {{ item.prixProduit }}DH</p>
 
-            <form action="{{ path('panier_ajouter') }}" method="POST" class="add-to-cart-form">
-                <input type="hidden" name="nom_produit" value="MDF SONOMA">
-                <input type="hidden" name="prix_produit" value="680DH">
-                <button type="submit" class="btn-panier">Ajouter au panier</button>
-            </form>
-        </div>
-        <div class="produits-col1">
-            <img src="images/MDF2.jpg" alt="front profuct image">
-            <img src="images/MDF22.png" alt="rear product image" class="rear-img1">
-            <p>MDF K003</p>
-            <p>Prix: 680DH</p>
-
-            <form action="{{ path('panier_ajouter') }}" method="POST" class="add-to-cart-form">
-                <input type="hidden" name="nom_produit" value="MDF K003">
-                <input type="hidden" name="prix_produit" value="680DH">
-                <button type="submit" class="btn-panier">Ajouter au panier</button>
-            </form>
-        </div>
-        <div class="produits-col2">
-            <img src="images/MDF3.jpg" alt="front profuct image">
-            <img src="images/MDF33.jpeg" alt="rear product image" class="rear-img2">
-            <p>MDF K009</p>
-            <p>Prix: 680DH</p>
-
-            <form action="{{ path('panier_ajouter') }}" method="POST" class="add-to-cart-form">
-                <input type="hidden" name="nom_produit" value="MDF K009">
-                <input type="hidden" name="prix_produit" value="680DH">
-                <button type="submit" class="btn-panier">Ajouter au panier</button>
-            </form>
-        </div>
-    </div>
-    
-    <div class="row">
-         <div class="produits-col3">
-            <img src="images/MDF40.jpg" alt="front profuct image">
-            <img src="images/MDF44.png" alt="rear product image" class="rear-img3">
-            <p>MDF L031</p>
-            <p>Prix: 680DH</p>
-            
-            <form action="{{ path('panier_ajouter') }}" method="POST" class="add-to-cart-form">
-                <input type="hidden" name="nom_produit" value="MDF L031">
-                <input type="hidden" name="prix_produit" value="680DH">
-                <button type="submit" class="btn-panier">Ajouter au panier</button>
-            </form>
-        </div>
-        <div class="produits-col4">
-            <img src="images/MDF5.jpg" alt="front profuct image">
-            <img src="images/MDF55.jpg" alt="rear product image" class="rear-img4">
-            <p>MDF L051</p>
-            <p>Prix: 680DH</p>
-
-            <form action="{{ path('panier_ajouter') }}" method="POST" class="add-to-cart-form">
-                <input type="hidden" name="nom_produit" value="MDF L051">
-                <input type="hidden" name="prix_produit" value="680DH">
-                <button type="submit" class="btn-panier">Ajouter au panier</button>
-            </form>
-        </div>
-        <div class="produits-col5">
-            <img src="images/MDF6.png" alt="front profuct image">
-            <img src="images/MDF66.jpg" alt="rear product image" class="rear-img5">
-            <p>MDF TEAK</p>
-            <p>Prix: 680DH</p>
-
-            <form action="{{ path('panier_ajouter') }}" method="POST" class="add-to-cart-form">
-                <input type="hidden" name="nom_produit" value="MDF TEAK">
-                <input type="hidden" name="prix_produit" value="680DH">
-                <button type="submit" class="btn-panier">Ajouter au panier</button>
-            </form>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="produits-col">
-            <img src="images/MDF7.png" alt="front profuct image">
-            <img src="images/MDF77.jpg" alt="rear product image" class="rear-img">
-            <p>MDF UD</p>
-            <p>Prix: 680DH</p>
-
-            <form action="{{ path('panier_ajouter') }}" method="POST" class="add-to-cart-form">
-                <input type="hidden" name="nom_produit" value="MDF UD">
-                <input type="hidden" name="prix_produit" value="680DH">
-                <button type="submit" class="btn-panier">Ajouter au panier</button>
-            </form>
-        </div>
-        <div class="produits-col1">
-            <img src="images/MDF8.png" alt="front profuct image">
-            <img src="images/MDF88.jpg" alt="rear product image" class="rear-img1">
-            <p>MDF EBRU</p>
-            <p>Prix: 680DH</p>
-
-            <form action="{{ path('panier_ajouter') }}" method="POST" class="add-to-cart-form">
-                <input type="hidden" name="nom_produit" value="MDF EBRU">
-                <input type="hidden" name="prix_produit" value="680DH">
-                <button type="submit" class="btn-panier">Ajouter au panier</button>
-            </form>
-      </div>
-      <div class="produits-col2">
-            <img src="images/MDF9.png" alt="front profuct image">
-            <img src="images/MDF99.jpg" alt="rear product image" class="rear-img2">
-            <p>MDF SAFIR MEŞE</p>
-            <p>Prix: 680DH</p>
-
-            <form action="{{ path('panier_ajouter') }}" method="POST" class="add-to-cart-form">
-                <input type="hidden" name="nom_produit" value="MDF SAFIR MEŞE">
-                <input type="hidden" name="prix_produit" value="680DH">
-                <button type="submit" class="btn-panier">Ajouter au panier</button>
-            </form>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="produits-col">
-            <img src="images/MDF10.jpg" alt="front profuct image">
-            <img src="images/MDF1010.jpg" alt="rear product image" class="rear-img">
-            <p>MDF AFRIKA</p>
-            <p>Prix: 680DH</p>
-
-            <form action="{{ path('panier_ajouter') }}" method="POST" class="add-to-cart-form">
-                <input type="hidden" name="nom_produit" value="MDF AFRIKA">
-                <input type="hidden" name="prix_produit" value="680DH">
-                <button type="submit" class="btn-panier">Ajouter au panier</button>
-            </form>
-        </div>
-        <div class="produits-col1">
-            <img src="images/MDF11.png" alt="front profuct image">
-            <img src="images/MDF1111.jpg" alt="rear product image" class="rear-img1">
-            <p>MDF HARLEY CEVIS</p>
-            <p>Prix: 680DH</p>
-
-            <form action="{{ path('panier_ajouter') }}" method="POST" class="add-to-cart-form">
-                <input type="hidden" name="nom_produit" value="MDF HARLEY CEVIS">
-                <input type="hidden" name="prix_produit" value="680DH">
-                <button type="submit" class="btn-panier">Ajouter au panier</button>
-            </form>
-        </div>
-        <div class="produits-col2">
-            <img src="images/MDF12.png" alt="front profuct image">
-            <img src="images/MDF1212.jpg" alt="rear product image" class="rear-img2">
-            <p>MDF RAHEL</p>
-            <p>Prix: 680DH</p>
-
-            <form action="{{ path('panier_ajouter') }}" method="POST" class="add-to-cart-form">
-                <input type="hidden" name="nom_produit" value="MDF RAHEL">
-                <input type="hidden" name="prix_produit" value="680DH">
-                <button type="submit" class="btn-panier">Ajouter au panier</button>
-            </form>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="produits-col">
-            <img src="images/STRA4.png" alt="front profuct image">
-            <img src="images/STRA444.png" alt="rear product image" class="rear-img">
-            <p>STRATIFIE PATARA</p>
-            <p>Prix: 950DH</p>
-
-            <form action="{{ path('panier_ajouter') }}" method="POST" class="add-to-cart-form">
-                <input type="hidden" name="nom_produit" value="STRATIFIE PATARA">
-                <input type="hidden" name="prix_produit" value="950DH">
-                <button type="submit" class="btn-panier">Ajouter au panier</button>
-            </form>
-        </div>
-        <div class="produits-col">
-            <img src="images/STRA5.jpg" alt="front profuct image">
-            <img src="images/STRA55.jpeg" alt="rear product image" class="rear-img">
-            <p>STRATIFIE NOYER</p>
-            <p>Prix: 950DH</p>
-
-            <form action="{{ path('panier_ajouter') }}" method="POST" class="add-to-cart-form">
-                <input type="hidden" name="nom_produit" value="STRATIFIE NOYER">
-                <input type="hidden" name="prix_produit" value="950DH">
-                <button type="submit" class="btn-panier">Ajouter au panier</button>
-            </form>
-        </div>
-        <div class="produits-col">
-            <img src="images/MDF13.jpg" alt="front profuct image">
-            <img src="images/MDF1313.jpg" alt="rear product image" class="rear-img">
-            <p>LATTE LIFKASS CAMSAN</p>
-            <p>Prix: 950DH</p>
-
-            <form action="{{ path('panier_ajouter') }}" method="POST" class="add-to-cart-form">
-                <input type="hidden" name="nom_produit" value="LATTE LIFKASS CAMSAN">
-                <input type="hidden" name="prix_produit" value="950DH">
-                <button type="submit" class="btn-panier">Ajouter au panier</button>
-            </form>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="produits-col">
-            <img src="images/MDF14.jpg" alt="front profuct image">
-            <img src="images/MDF1414.jpg" alt="rear product image" class="rear-img">
-            <p>LATTE CAMSANE CEVISE</p>
-            <p>Prix: 950DH</p>
-
-            <form action="{{ path('panier_ajouter') }}" method="POST" class="add-to-cart-form">
-                <input type="hidden" name="nom_produit" value="LATTE CAMSANE CEVISE">
-                <input type="hidden" name="prix_produit" value="950DH">
-                <button type="submit" class="btn-panier">Ajouter au panier</button>
-            </form>
-        </div>
-        <div class="produits-col">
-            <img src="images/MDF15.jpg" alt="front profuct image">
-            <img src="images/MDF1515.jpg" alt="rear product image" class="rear-img">
-            <p>MDF YENI MESE</p>
-            <p>Prix: 680DH</p>
-
-            <form action="{{ path('panier_ajouter') }}" method="POST" class="add-to-cart-form">
-                <input type="hidden" name="nom_produit" value="MDF YENI MESE">
-                <input type="hidden" name="prix_produit" value="680DH">
-                <button type="submit" class="btn-panier">Ajouter au panier</button>
-            </form>
-        </div>
-        <div class="produits-col">
-            <img src="images/HG1.jpg" alt="front profuct image">
-            <img src="images/HG11.jpg" alt="rear product image" class="rear-img">
-            <p>BLANC HIGH GLOSS</p>
-            <p>Prix: 950DH</p>
-
-            <form action="{{ path('panier_ajouter') }}" method="POST" class="add-to-cart-form">
-                <input type="hidden" name="nom_produit" value="BLANC HIGH GLOSS">
-                <input type="hidden" name="prix_produit" value="950DH">
-                <button type="submit" class="btn-panier">Ajouter au panier</button>
-            </form>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="produits-col">
-            <img src="images/HG2.jpg" alt="front profuct image">
-            <img src="images/HG22.jpg" alt="rear product image" class="rear-img">
-            <p>BLANC GALAXY HIGH GLOSS</p>
-            <p>Prix: 950DH</p>
-
-            <form action="{{ path('panier_ajouter') }}" method="POST" class="add-to-cart-form">
-                <input type="hidden" name="nom_produit" value="BLANC GALAXY HIGH GLOSS">
-                <input type="hidden" name="prix_produit" value="950DH">
-                <button type="submit" class="btn-panier">Ajouter au panier</button>
-            </form>
-        </div>
-        <div class="produits-col">
-            <img src="images/HG3.jpg" alt="front profuct image">
-            <img src="images/HG33.jpg" alt="rear product image" class="rear-img">
-            <p>CREME GALAXY HIGH GLOSS</p>
-            <p>Prix: 950DH</p>
-
-            <form action="{{ path('panier_ajouter') }}" method="POST" class="add-to-cart-form">
-                <input type="hidden" name="nom_produit" value="CREME GALAXY HIGH GLOSS">
-                <input type="hidden" name="prix_produit" value="950DH">
-                <button type="submit" class="btn-panier">Ajouter au panier</button>
-            </form>
-        </div>
-        <div class="produits-col">
-            <img src="images/HG4.jpg" alt="front profuct image">
-            <img src="images/HG44.jpeg" alt="rear product image" class="rear-img">
-            <p>CREME HIGH GLOSS</p>
-            <p>Prix: 950DH</p>
-
-            <form action="{{ path('panier_ajouter') }}" method="POST" class="add-to-cart-form">
-                <input type="hidden" name="nom_produit" value="CREME HIGH GLOSS">
-                <input type="hidden" name="prix_produit" value="950DH">
-                <button type="submit" class="btn-panier">Ajouter au panier</button>
-            </form>
-        </div>
-    </div>
-    
-    <div class="row">
-        <div class="produits-col">
-            <img src="images/HG5.jpg" alt="front profuct image">
-            <img src="images/HG55.jpeg" alt="rear product image" class="rear-img">
-            <p>GRIS ANTHRACITE HIGH GLOSS</p>
-            <p>Prix: 950DH</p>
-
-            <form action="{{ path('panier_ajouter') }}" method="POST" class="add-to-cart-form">
-                <input type="hidden" name="nom_produit" value="GRIS ANTHRACITE HIGH GLOSS">
-                <input type="hidden" name="prix_produit" value="950DH">
-                <button type="submit" class="btn-panier">Ajouter au panier</button>
-            </form>
-        </div>
-        <div class="produits-col">
-            <img src="images/HG6.jpg" alt="front profuct image">
-            <img src="images/HG66.jpg" alt="rear product image" class="rear-img">
-            <p>GRIS ANTHRACITE BRILLANT HIGH GLOSS</p>
-            <p>Prix: 950DH</p>
-
-            <form action="{{ path('panier_ajouter') }}" method="POST" class="add-to-cart-form">
-                <input type="hidden" name="nom_produit" value="GRIS ANTHRACITE BRILLANT HIGH GLOSS">
-                <input type="hidden" name="prix_produit" value="950DH">
-                <button type="submit" class="btn-panier">Ajouter au panier</button>
-            </form>
-        </div>
-        <div class="produits-col">
-            <img src="images/HG7.jpg" alt="front profuct image">
-            <img src="images/HG77.jpg" alt="rear product image" class="rear-img">
-            <p>HONEY GALAXY HIGH GLOSS</p>
-            <p>Prix: 950DH</p>
-
-            <form action="{{ path('panier_ajouter') }}" method="POST" class="add-to-cart-form">
-                <input type="hidden" name="nom_produit" value="HONEY GALAXY HIGH GLOSS">
-                <input type="hidden" name="prix_produit" value="950DH">
-                <button type="submit" class="btn-panier">Ajouter au panier</button>
-            </form>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="produits-col">
-            <img src="images/HG8.jpg" alt="front profuct image">
-            <img src="images/HG88.jpg" alt="rear product image" class="rear-img">
-            <p>VIZON CAPPUCCINO HIGH GLOSS</p>
-            <p>Prix: 950DH</p>
-
-            <form action="{{ path('panier_ajouter') }}" method="POST" class="add-to-cart-form">
-                <input type="hidden" name="nom_produit" value="VIZON CAPPUCCINO HIGH GLOSS">
-                <input type="hidden" name="prix_produit" value="950DH">
-                <button type="submit" class="btn-panier">Ajouter au panier</button>
-            </form>
-        </div>
-        <div class="produits-col">
-            <img src="images/" alt="front profuct image">
-            <img src="images/" alt="rear product image" class="rear-img">
-            <p></p>
-        </div>
-        <div class="produits-col">
-            <img src="images/" alt="front profuct image">
-            <img src="images/" alt="rear product image" class="rear-img">
-            <p></p>
-        </div>
-    </div>
+                        <form action="{{ path('panier_ajouter') }}" method="POST" class="add-to-cart-form">
+                            <input type="hidden" name="nom_produit" value="{{ item.nomProduit }}">
+                            <input type="hidden" name="prix_produit" value="{{ item.prixProduit }}">
+                            <input type="hidden" name="produit_id" value="{{ item.id }}">
+                            <button type="submit" class="btn-panier">Ajouter au panier</button>
+                        </form>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endfor %}
+    {% else %}
+        <p class="text-center">Aucun produit disponible pour le moment.</p>
+    {% endif %}
 </section>
 
+
+
+<style>
+/*------------ Produits page -----------*/
+.produits {
+    width: 80%;
+    margin: auto;
+    text-align: center;
+    padding-top: 0;
+}
+
+.produits .row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 30px;
+    margin-top: 25px;
+}
+
+/* Conteneur principal du produit */
+.produit-item,
+.produit-item-col1,
+.produit-item-col2 {
+    flex: 0 1 calc(33.333% - 30px);
+    box-sizing: border-box;
+    border-radius: 10px;
+    margin-bottom: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Conteneur d'images avec effet hover */
+.produit-hover-container {
+    position: relative;
+    width: 95%;
+    height: 200px;
+    margin-bottom: 15px;
+}
+
+/* Images avant/arrière */
+.produit-hover-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 8px;
+    transition: opacity 0.4s ease-out;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+/* Image arrière (hover) cachée par défaut */
+.produit-image-hover {
+    opacity: 0;
+}
+
+/* Effet hover */
+.produit-item:hover .produit-image-hover,
+.produit-item-col1:hover .produit-image-hover,
+.produit-item-col2:hover .produit-image-hover {
+    opacity: 1;
+}
+
+.produit-item:hover .produit-image-front,
+.produit-item-col1:hover .produit-image-front,
+.produit-item-col2:hover .produit-image-front {
+    opacity: 0;
+}
+
+/* Bouton Ajouter au panier */
+.btn-panier {
+    background-color: #5fa9cdff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 10px;
+}
+
+.btn-panier:hover {
+    background-color: #568facff;
+}
+
+/* Message quand aucun produit */
+.text-center {
+    text-align: center;
+    width: 100%;
+}
+</style>
+
 {% endblock %}
-
-

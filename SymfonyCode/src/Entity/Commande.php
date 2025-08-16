@@ -2,12 +2,15 @@
 
 namespace App\Entity;
 
-use App\Repository\CommandesRepository;
+use App\Repository\CommandeRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\DBAL\Types\Types;
 
-#[ORM\Entity(repositoryClass: CommandesRepository::class)]
-class Commandes
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+
+#[ORM\Entity(repositoryClass: CommandeRepository::class)]
+class Commande
 {
 
     public const STATUT_EN_ATTENTE = 'EN_ATTENTE';
@@ -40,6 +43,9 @@ class Commandes
     #[ORM\ManyToOne(inversedBy: 'commandes')]
     #[ORM\JoinColumn(nullable: false)]
     private ?User $utilisateur = null;
+
+    #[ORM\OneToMany(targetEntity: LigneCommande::class, mappedBy: 'commande', cascade: ['persist'])]
+    private Collection $lignes;
 
     public function getId(): ?int
     {
@@ -102,8 +108,23 @@ class Commandes
 
     public function __construct()
     {
+        $this->lignes = new ArrayCollection();
         $this->dateCommande = new \DateTimeImmutable();
         $this->statut = self::STATUT_EN_ATTENTE;
+    }
+
+    public function getLignes(): Collection
+    {
+        return $this->lignes;
+    }
+
+    public function addLigne(LigneCommande $ligne): static
+    {
+        if (!$this->lignes->contains($ligne)) {
+            $this->lignes->add($ligne);
+            $ligne->setCommande($this);
+        }
+        return $this;
     }
 
 

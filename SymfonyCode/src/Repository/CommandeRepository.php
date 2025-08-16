@@ -2,32 +2,22 @@
 
 namespace App\Repository;
 
-use App\Entity\Commandes;
+use App\Entity\Commande;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<Commandes>
+ * @extends ServiceEntityRepository<Commande>
  */
-class CommandesRepository extends ServiceEntityRepository
+class CommandeRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Commandes::class);
-    }
-
-    public function findByUserId(int $userId): array
-    {
-        return $this->createQueryBuilder('c')
-            ->andWhere('c.utilisateur = :userId')
-            ->setParameter('userId', $userId)
-            ->orderBy('c.dateCommande', 'DESC')
-            ->getQuery()
-            ->getResult();
+        parent::__construct($registry, Commande::class);
     }
 
     //    /**
-    //     * @return Commandes[] Returns an array of Commandes objects
+    //     * @return Commande[] Returns an array of Commande objects
     //     */
     //    public function findByExampleField($value): array
     //    {
@@ -41,7 +31,7 @@ class CommandesRepository extends ServiceEntityRepository
     //        ;
     //    }
 
-    //    public function findOneBySomeField($value): ?Commandes
+    //    public function findOneBySomeField($value): ?Commande
     //    {
     //        return $this->createQueryBuilder('c')
     //            ->andWhere('c.exampleField = :val')

@@ -40,15 +40,23 @@ class ConnexionAuthenticator extends AbstractLoginFormAuthenticator
     }
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
-    {
+{
+        // Si l'utilisateur a essayé d'accéder à une page protégée, on le redirige là-bas
         if ($targetPath = $this->getTargetPath($request->getSession(), $firewallName)) {
-            return new RedirectResponse($this->urlGenerator->generate('home'));
+            return new RedirectResponse($targetPath);
         }
 
-        // For example:
-        // return new RedirectResponse($this->urlGenerator->generate('some_route'));
-        throw new \Exception('TODO: provide a valid redirect inside '.__FILE__);
+        $user = $token->getUser();
+
+        // Redirection selon le rôle
+        if (in_array('ROLE_ADMIN', $user->getRoles())) {
+            return new RedirectResponse($this->urlGenerator->generate('homeAdmin'));
+        }
+
+        // Redirection par défaut pour un utilisateur normal
+        return new RedirectResponse($this->urlGenerator->generate('home'));
     }
+
 
     protected function getLoginUrl(Request $request): string
     {

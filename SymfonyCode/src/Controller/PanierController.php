@@ -2,7 +2,8 @@
 namespace App\Controller;
 
 use App\Entity\Panier;
-use App\Entity\Commandes;
+use App\Entity\Commande;
+use App\Entity\LigneCommande;
 
 use App\Repository\ContactRepository;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -147,48 +148,63 @@ class PanierController extends AbstractController
     }
 
     #[Route('/panier/passer-commande-check', name: 'passer_commande_check')]
-public function passerCommandeCheck(
-    ContactRepository $contactRepository,
-    EntityManagerInterface $em
-): RedirectResponse {
-    $user = $this->getUser();
+    public function passerCommandeCheck(
+        ContactRepository $contactRepository,
+        EntityManagerInterface $em
+    ): RedirectResponse {
+        $user = $this->getUser();
 
-    if (!$user) {
-        return $this->redirectToRoute('app_login');
+        if (!$user) {
+            return $this->redirectToRoute('app_login');
+        }
+
+        // Vérifie si l'utilisateur a rempli le formulaire de contact
+        $hasContact = $contactRepository->findOneBy(['user' => $user]);
+        if (!$hasContact) {
+            $this->addFlash('error', 'Veuillez remplir le formulaire de contact d\'abord');
+            return $this->redirectToRoute('contactUs');
+        }
+
+        // Récupère le panier
+        $paniers = $em->getRepository(Panier::class)->findBy(['utilisateur' => $user]);
+        if (!$paniers) {
+            $this->addFlash('error', 'Votre panier est vide');
+            return $this->redirectToRoute('panier_index');
+        }
+
+        // Calcul du prix total
+        $total = 0;
+        foreach ($paniers as $panier) {
+            $prix = (float) str_replace('DH', '', $panier->getPrixProduit());
+            $total += $prix * $panier->getQuantite();
+        }
+
+        // Création de la commande
+        $commande = new Commande();
+        $commande->setUtilisateur($user)
+                ->setDateCommande(new \DateTimeImmutable())
+                ->setStatut(Commande::STATUT_EN_ATTENTE)
+                ->setPrixTotal($total);
+        $em->persist($commande);
+
+        // Création des lignes de commande
+        foreach ($paniers as $panier) {
+            $ligne = new LigneCommande();
+            $ligne->setCommande($commande)
+                ->setNomProduit($panier->getNomProduit())
+                ->setPrixProduit((float) str_replace('DH', '', $panier->getPrixProduit()))
+                ->setQuantite($panier->getQuantite());
+            $commande->addLigne($ligne); // Ajoute la ligne à la commande
+            $em->persist($ligne);
+            
+            // Supprime le panier
+            $em->remove($panier);
+        }
+
+        $em->flush();
+
+        $this->addFlash('success', 'Commande passée avec succès. Total: ' . $total . ' DH');
+        return $this->redirectToRoute('panier_index');
     }
 
-    // Vérifie si l'utilisateur a rempli le formulaire de contact
-    $hasContact = $contactRepository->findOneBy(['user' => $user]);
-
-    if (!$hasContact) {
-        $this->addFlash('error', 'Veuillez remplir le formulaire de contact d\'abord');
-        return $this->redirectToRoute('contactUs');
-    }
-
-    // Calcul du prix total
-    $paniers = $em->getRepository(Panier::class)->findBy(['utilisateur' => $user]);
-    $total = 0;
-    
-    foreach ($paniers as $panier) {
-        $prix = (float) str_replace('DH', '', $panier->getPrixProduit());
-        $total += $prix * $panier->getQuantite();
-    }
-
-    // Création de la commande avec le statut correct
-    $commande = new Commandes();
-    $commande->setUtilisateur($user)
-            ->setDateCommande(new \DateTimeImmutable())
-            ->setStatut(Commandes::STATUT_EN_ATTENTE) // Utilisez la constante ici
-            ->setPrixTotal($total);
-    $em->persist($commande);
-
-    // Vidage du panier
-    foreach ($paniers as $panier) {
-        $em->remove($panier);
-    }
-    $em->flush();
-
-    $this->addFlash('success', 'Commande passée avec succès. Total: '.$total.' DH');
-    return $this->redirectToRoute('panier_index');
-}
 }

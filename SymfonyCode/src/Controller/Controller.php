@@ -14,9 +14,14 @@ use Symfony\Component\HttpFoundation\Response;
 
 class Controller extends AbstractController{
 
-    public function index()
+    public function home()
     {
-        return $this->render("index.html.twig");
+        return $this->render("home.html.twig");
+    }
+
+    public function homeAdmin()
+    {
+        return $this->render("homeAdmin.html.twig");
     }
 
     public function aboutUs()

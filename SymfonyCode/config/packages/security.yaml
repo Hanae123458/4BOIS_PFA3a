@@ -10,10 +10,7 @@ security:
         main:
             lazy: true
             provider: app_user_provider
-            form_login:
-                login_path: app_login
-                check_path: app_login
-                default_target_path: index
+            custom_authenticator: App\Security\ConnexionAuthenticator
             logout:
                 path: app_logout
             access_denied_url: login
@@ -21,12 +18,16 @@ security:
     access_control:
         - { path: ^/register, roles: PUBLIC_ACCESS }
         - { path: ^/login, roles: PUBLIC_ACCESS }
-        - { path: ^/index, roles: ROLE_USER }
+        - { path: ^/home, roles: ROLE_USER }
         - { path: ^/aboutUs, roles: ROLE_USER }
         - { path: ^/products, roles: ROLE_USER }
         - { path: ^/contactUs, roles: ROLE_USER }
         - { path: ^/panier, roles: ROLE_USER }
         - { path: ^/logout-check, roles: ROLE_USER }
+        - { path: ^/homeAdmin, roles: ROLE_ADMIN }
+        - { path: ^/produitsAdmin, roles: ROLE_ADMIN }
+        - { path: ^/commandesAdmin, roles: ROLE_ADMIN }
+        - { path: ^/contactsAdmin, roles: ROLE_ADMIN }
 
 when@test:
     security:

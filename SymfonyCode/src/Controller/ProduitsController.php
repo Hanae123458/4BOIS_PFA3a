@@ -159,4 +159,11 @@ class ProduitsController extends AbstractController
         $this->addFlash('success', 'Produit supprimé avec succès !');
         return $this->redirectToRoute('produits_admin');
     }
+
+    #[Route('/products', name: 'app_products')]
+    public function products(ManagerRegistry $doctrine): Response
+    {
+        $produits = $doctrine->getRepository(Produits::class)->findAll();
+        return $this->render('products.html.twig', ['produits' => $produits]);
+    }
 }
